@@ -12,3 +12,116 @@ execute:
   message: false
   warning: false
 ---
+
+```{r load-packages}
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggeffects)
+library(performance)
+library(naniar) # or equivalent
+library(flextable) # or equivalent
+library(car)
+library(broom)
+# would be nice to have
+library(corrplot)
+library(AICcmodavg)
+library(GGally)
+
+```
+
+```{r reading-data}
+plant <- read.csv(here("data/knb-lter-hfr/hf109-01-sarracenia.csv")) %>%
+  #making column names cleaner 
+  clean_names() %>% 
+  #selecting the columns of interest 
+  select(totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls)
+
+```
+
+```{r missing-data-vis}
+gg_miss_var(plant)
+```
+
+Subset the data by dropping NAs:
+
+```{r subset-drop-na}
+plant_subset <- plant %>% 
+  drop_na(sla, chlorophyll, amass, num_lvs, num_phylls)
+
+```
+
+Create a correlation plot:
+
+To determine the relationships between numerical variables in our dataset, we calculated Pearson's r and visually represented correlation using a correlation plot.
+
+```{r correlation-plot}
+plant_cor <-  plant_subset %>% 
+  select(feedlevel:num_phylls) %>% 
+  cor(method="pearson")
+
+#creating a correlation plot 
+corrplot(plant_cor,
+         #change the shape of what is in the cells 
+         method = "ellipse",
+         #want pearson's correlation to show up in numbers 
+         addCoef.col = "black")
+```
+
+create a plot of each variable compared against the others
+
+```{r pairs-plot}
+plant_subset %>% 
+  select(feedlevel:num_phylls) %>% 
+  ggpairs() 
+#diagonal is each variable compared to itself 
+#density plots for numerical variables 
+#frequency historgram for categorical data 
+```
+
+null models - none of the predictors can predict the response
+
+starting regression here:
+
+To determine how species and physiological characteristics predict biomass, we fit multiple linear models.
+
+```{r null-and-full-models}
+null <- lm(totmass ~ 1, data = plant_subset)
+full <- lm(totmass ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+```
+
+We visually assessed normality and homoskedasticity of residuals using diagnostic plots for the full model:
+
+```{r full-diagnostics}
+par(mfrow = c(2, 2))
+plot(full)
+#residual v fitted shows a cone shape (wider as it goes along the x-axis) which means there is not constant variance and it is heteroskedastic 
+```
+
+We also tested for normality and homoscedasticity using the statistical tests below:
+
+```{r}
+#check normality of the full model 
+check_normality(full)
+#check the heteroscedasticity of the residuals for the full model 
+check_heteroscedasticity(full)
+#based on statistical tests we would say the assumptions of liner models are not met 
+```
+
+check model with log transformation
+
+```{r}
+full_log <- lm(log(totmass) ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+
+plot(full_log)
+```
+
+check normality and heteroscedasticity of full log model
+
+```{r}
+#check normality of the full model 
+check_normality(full_log)
+#check the heteroscedasticity of the residuals for the full model 
+check_heteroscedasticity(full_log)
+#based on statistical tests we would say the assumptions of liner models are not met 
+```
