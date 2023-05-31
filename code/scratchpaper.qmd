@@ -125,3 +125,111 @@ check_normality(full_log)
 check_heteroscedasticity(full_log)
 #based on statistical tests we would say the assumptions of liner models are not met 
 ```
+
+evaluate multicollinearity:
+
+```{r calculate-vif}
+#want to know if any predictor variables are inflating your R^2 
+#say no because all values are less than 5 
+#measures the way two predictors interact with each other 
+
+car::vif(full_log)
+```
+
+we evaluated multicollinearity by calculating generalized variance inflation factor and determined that the model does not display any factors of multicollinearity based on the values of GVIF (less than 5)
+
+try some more models
+
+addressing the question: what set of predictor variables best explains the response?
+
+```{r}
+model2_log <- lm(log(totmass) ~ species, data = plant_subset)
+```
+
+```{r}
+#check normality of the full model 
+check_normality(model2_log)
+#check the heteroscedasticity of the residuals for the full model 
+check_heteroscedasticity(model2_log)
+#based on statistical tests we would say the assumptions of liner models are not met
+```
+
+```{r}
+#trying to make null log model but not working 
+null_log <- lm(log(totmass ~ 1, data = plant_subset))
+```
+
+```{r}
+#comparing different models using AIC values 
+#choose full model because it has the lowest AIC value 
+
+AICc(c(full_log, model2_log, null_log))
+```
+
+```{r}
+AICc(full_log)
+AICc(model2_log)
+AICc(null_log)
+
+MuMIn::AICc(full_log, model2_log, null_log)
+MuMIn::model.sel(full_log, model2_log, null_log)
+```
+
+we compared models using AIC and chose the model with the lowest value which was the full log
+
+# Results 
+
+we found that the full model including x, y, and z predictors best predicted (model summary statistics).
+
+```{r}
+#creeate a table 
+#first look at model summary 
+summary(full_log)
+```
+
+use 'ggpredict()' to backtransform estimates
+
+```{r}
+#visualizations of our model predictions 
+
+model_pred <- ggpredict(full_log, terms = "species", back.transform = TRUE)
+
+plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = T)
+
+plot(ggpredict(full_log, terms = "sla", back.transform = TRUE), add.data = T)
+
+model_pred
+```
+
+all else held constant -\> these variables held at these values
+
+\* feedlevel = 0.18
+\* sla = 129.27
+\* chlorophyll = 471.29
+\* amass = 35.26
+\* num_lvs = 6.00
+\* num_phylls = 0.00
+
+you would expect total body mass for each species to be around the predicted values
+
+```{r}
+summary(full_log)
+table <- tidy(full_log,
+#add confidence intervals 
+ conf.int = T) %>% 
+  #change the p-value numbers if they're really small 
+  #using mutate 
+  #make it into a flextable 
+  flextable() %>% 
+  #fit it to the viewer 
+  autofit()
+#takes out information from summary object and puts it into a table 
+
+table
+```
+
+#different types of anovas
+
+```{r}
+#anova table not needed in homework
+```
