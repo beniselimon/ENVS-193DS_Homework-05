@@ -156,7 +156,7 @@ check_heteroscedasticity(model2_log)
 
 ```{r}
 #trying to make null log model but not working 
-null_log <- lm(log(totmass ~ 1, data = plant_subset))
+null_log <- lm(log(totmass) ~ 1, data = plant_subset)
 ```
 
 ```{r}
@@ -177,7 +177,7 @@ MuMIn::model.sel(full_log, model2_log, null_log)
 
 we compared models using AIC and chose the model with the lowest value which was the full log
 
-# Results 
+# Results
 
 we found that the full model including x, y, and z predictors best predicted (model summary statistics).
 
@@ -203,12 +203,7 @@ model_pred
 
 all else held constant -\> these variables held at these values
 
-\* feedlevel = 0.18
-\* sla = 129.27
-\* chlorophyll = 471.29
-\* amass = 35.26
-\* num_lvs = 6.00
-\* num_phylls = 0.00
+\* feedlevel = 0.18 \* sla = 129.27 \* chlorophyll = 471.29 \* amass = 35.26 \* num_lvs = 6.00 \* num_phylls = 0.00
 
 you would expect total body mass for each species to be around the predicted values
 
