@@ -1,0 +1,109 @@
+---
+title: "Final Homework 5"
+author: "Benise Limon"
+format: 
+  html: 
+    toc: true 
+    toc-location: left
+    code-fold: true 
+    theme: yeti 
+editor: visual
+execute: 
+  message: false
+  warning: false
+---
+
+## Preparation
+
+```{r load-packages}
+library(tidyverse)
+library(here)
+library(janitor)
+library(ggeffects)
+library(performance)
+library(naniar) # or equivalent
+library(flextable) # or equivalent
+library(car)
+library(broom)
+library(dplyr)
+# would be nice to have
+library(corrplot)
+library(AICcmodavg)
+library(GGally)
+```
+
+## Introduction 
+
+Write a 5-10 sentence introduction to the analysis you conduct. Some useful information\
+could include (but is not limited to):\
+a. What are Sarracenia?\
+b. Why might people care about them?\
+c. Why do you think it could be useful and/or important to predict individual biomass from morphological, physiological, or taxonomic characteristics?\
+d. What questions are you addressing?\
+e. What hypotheses are you testing?\
+f. Include 3-5 in-text citations of peer-reviewed work.
+
+## Methods
+
+Write a methods section that includes\
+a. Sampling methods (these should be summarized from the metadata and cited)\
+b. Description of data organization and processing (1-3 sentences)
+
+```{r reading-data}
+plant <- read.csv(here("data/knb-lter-hfr/hf109-01-sarracenia.csv")) %>%
+  #making column names cleaner 
+  clean_names() %>% 
+  #selecting the columns of interest 
+  select(totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls)
+```
+
+\
+c. Visualization of missing observations with an accompanying caption and discussion
+
+```{r missing-data-vis, fig.cap = "Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes data is missing."}
+#visualizing missing observations 
+gg_miss_var(plant)+
+  #adding a caption 
+#  labs( caption = "Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes data is missing.") +
+  theme(plot.caption = element_text(size=10, hjust = 0.8, vjust = 2))
+```
+
+```{r subset-data}
+#create a subset of the plant dataframe that does not include missing values 
+plant_subset <- plant %>% 
+  drop_na(sla, chlorophyll, amass, num_lvs, num_phylls)
+```
+
+\
+(caption: 1-3 sentences, discussion: 1-3 sentences)\
+d. Visualization of Pearson\'s correlation between variables with an accompanying\
+caption and discussion (caption: 1-3 sentences, discussion: 1-3 sentences)
+
+\
+e. Visualization of relationships between variables (not correlation) with an\
+accompanying caption and discussion (caption: 1-3 sentences, discussion: 1-3\
+sentences)\
+f. Creating the null and full model with accompanying discussion (1-3 sentences)\
+g. Visual and statistical assumption checks for the full model with accompanying\
+discussion (1-3 sentences)\
+h. Explanation of any transformation and justification (1-3 sentences)\
+i. Model construction with visual and statistical assumption checks for three\
+additional models with justification (i.e. why did you choose those predictor\
+variables?) (justification: 1-3 sentences per model)\
+j. Variance inflation factor check for the full model with accompanying discussion\
+(discussion: 1-3 sentences)\
+k. Model comparison using the null model, full model, and additional models from part 7g
+
+## Results 
+
+Write a results section that includes\
+a. A description of the best model and how you chose it, with a summary of model\
+results (parenthetical and/or table, 1-3 sentences)\
+b. Interpretation of your chosen model (1-3 sentences)\
+c. Visualization of model predictions for biomass as a function of the predictor\
+variable of your choice with an accompanying caption (caption: 1-3 sentences)\
+d. Discussion of results: what does this model mean biologically? (1-3 sentences)
+
+## Bibliography
+
+Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. \"Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates.\" *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
