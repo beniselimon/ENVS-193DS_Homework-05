@@ -32,16 +32,38 @@ library(AICcmodavg)
 library(GGally)
 ```
 
-## Introduction 
+## Introduction
 
 Write a 5-10 sentence introduction to the analysis you conduct. Some useful information\
 could include (but is not limited to):\
-a. What are Sarracenia?\
-b. Why might people care about them?\
-c. Why do you think it could be useful and/or important to predict individual biomass from morphological, physiological, or taxonomic characteristics?\
-d. What questions are you addressing?\
-e. What hypotheses are you testing?\
+a. What are Sarracenia?
+
+Sarracenia are a pitcher plant that is a genus of carnivorous plants native to the Eastern United States, Texas, and the Great Lakes. It is typically found in nutrient-poor environments and has developed the carnivorous capabilities to supplement its nutrient intake (Hotti et al. 2017).
+
+\
+b. Why might people care about them?
+
+Humans may care about sarracenia because it provides medical services to humans because its extractions can be used to treat type 2 diabetes and tuberculosis-like symptoms (Podolak et al. 2022)
+
+\
+c. Why do you think it could be useful and/or important to predict individual biomass from morphological, physiological, or taxonomic characteristics?
+
+Since sarracenia is very beneficial to humans, growing it in large amounts is ideal. It can be useful to know what morphological, physiological, or taxonomic characteristics can predict the largest amounts of individual biomass.
+
+\
+d. What questions are you addressing?
+
+In this analysis, I hope to address what morphological, physiological, or taxonomic characteristics are most influential to predict individual biomass. Various characteristics include chlorophyll, mass, specific leaf area, phyllodes, and pitchers and number of phyllodes.
+
+\
+e. What hypotheses are you testing?
+
+\
 f. Include 3-5 in-text citations of peer-reviewed work.
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
 
 ## Methods
 
@@ -60,7 +82,7 @@ plant <- read.csv(here("data/knb-lter-hfr/hf109-01-sarracenia.csv")) %>%
 \
 c. Visualization of missing observations with an accompanying caption and discussion
 
-```{r missing-data-vis, fig.cap = "Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes data is missing."}
+```{r missing-data-vis, fig.cap = "Figure 1: Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes data is missing."}
 #visualizing missing observations 
 gg_miss_var(plant)+
   #adding a caption 
@@ -75,14 +97,34 @@ plant_subset <- plant %>%
 ```
 
 \
-(caption: 1-3 sentences, discussion: 1-3 sentences)\
-d. Visualization of Pearson\'s correlation between variables with an accompanying\
-caption and discussion (caption: 1-3 sentences, discussion: 1-3 sentences)
+Discussion: 1-3 sentences
+
+\
+d. Visualization of Pearson's correlation between variables with an accompanying\
+caption and discussion.
+
+```{r pearson, fig.cap = "Figure 2: A correlation plot determining the relationship between variables in the dataset. The higher the number, the higher correlation."}
+# calculate Pearson's r for numerical values only
+plant_cor <- plant_subset %>% 
+  select(feedlevel:num_phylls) %>% 
+  cor(method = "pearson")
+  
+# creating a correlation plot
+corrplot(plant_cor,
+         # change the shape of what's in the cells
+         method = "ellipse",
+         addCoef.col = "black"
+         )
+```
+
+Discussion: 1-3 sentences
 
 \
 e. Visualization of relationships between variables (not correlation) with an\
 accompanying caption and discussion (caption: 1-3 sentences, discussion: 1-3\
-sentences)\
+sentences)
+
+\
 f. Creating the null and full model with accompanying discussion (1-3 sentences)\
 g. Visual and statistical assumption checks for the full model with accompanying\
 discussion (1-3 sentences)\
@@ -94,7 +136,7 @@ j. Variance inflation factor check for the full model with accompanying discussi
 (discussion: 1-3 sentences)\
 k. Model comparison using the null model, full model, and additional models from part 7g
 
-## Results 
+## Results
 
 Write a results section that includes\
 a. A description of the best model and how you chose it, with a summary of model\
@@ -106,4 +148,4 @@ d. Discussion of results: what does this model mean biologically? (1-3 sentences
 
 ## Bibliography
 
-Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. \"Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates.\" *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
+Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. "Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates." *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
