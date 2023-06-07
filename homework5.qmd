@@ -34,42 +34,17 @@ library(GGally)
 
 ## Introduction
 
-Write a 5-10 sentence introduction to the analysis you conduct. Some useful information\
-could include (but is not limited to):\
-a. What are Sarracenia?
-
-Sarracenia are a pitcher plant that is a genus of carnivorous plants native to the Eastern United States, Texas, and the Great Lakes. It is typically found in nutrient-poor environments and has developed the carnivorous capabilities to supplement its nutrient intake (Hotti et al. 2017).
-
-\
-b. Why might people care about them?
-
-Humans may care about sarracenia because it provides medical services to humans because its extractions can be used to treat type 2 diabetes and tuberculosis-like symptoms (Podolak et al. 2022)
-
-\
-c. Why do you think it could be useful and/or important to predict individual biomass from morphological, physiological, or taxonomic characteristics?
-
-Since sarracenia is very beneficial to humans, growing it in large amounts is ideal. It can be useful to know what morphological, physiological, or taxonomic characteristics can predict the largest amounts of individual biomass.
-
-\
-d. What questions are you addressing?
-
-In this analysis, I hope to address what morphological, physiological, or taxonomic characteristics are most influential to predict individual biomass. Various characteristics include chlorophyll, mass, specific leaf area, phyllodes, and pitchers and number of phyllodes.
-
-\
-e. What hypotheses are you testing?
-
-\
-f. Include 3-5 in-text citations of peer-reviewed work.
-
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
-
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
+Sarracenia are a pitcher plant that is a genus of carnivorous plants. It is typically found in nutrient-poor environments and has developed the carnivorous capabilities to supplement its nutrient intake (Hotti et al. 2017). Humans may care about sarracenia because it provides medical services to humans. The genus contains high amounts of numerous compounds with anti-inflammatory, antioxidant, antiviral and antibacterial properties (Pilarska et al. 2022). It can be used to treat specific illnesses such as type 2 diabetes and tuberculosis-like symptoms (Podolak et al. 2022). Since sarracenia is very beneficial to humans, growing it in large amounts is ideal. It can be useful to know what morphological, physiological, or taxonomic characteristics can predict the largest amounts of individual biomass. In this analysis, I hope to address what morphological, physiological, or taxonomic characteristics predict individual biomass. Various characteristics include chlorophyll, mass, specific leaf area, phyllodes, and pitchers and number of phyllodes. The null hypothesis is: None of the predictor variables, species type, feedlevel, specific leaf area, chlorophyll, mass-based light-saturated photosynthetic rate of youngest leaf, total number of pitchers and phyllodes produced by each plant, and number of phyllodes produced by each plant can predict individual biomass. The alternative hypothesis is: At least one of the predictor variables, species type, feedlevel, specific leaf area, chlorophyll, mass-based light-saturated photosynthetic rate of youngest leaf, total number of pitchers and phyllodes produced by each plant, and number of phyllodes produced by each plant can predict individual biomass.
 
 ## Methods
 
 Write a methods section that includes\
-a. Sampling methods (these should be summarized from the metadata and cited)\
-b. Description of data organization and processing (1-3 sentences)
+a. Sampling methods (these should be summarized from the metadata and cited)
+
+The data was sampled in 2005 from the Harvard Forest in Massachusetts. Local ecologists collected data on two plants of each Sarracenia species. Each plant was assigned to one of six feeding levels in a regression design ranging from 0 - 0.25g of finely ground wasps per feeding (for small species), 0 - 0.5g (for species of intermediate sizes), and 0 - 1.0g (for large species) and fed once a week for seven weeks. There were 120 plants total and aboveground size and mass were measured before and after treatment (Ellison et al. 2017).
+
+\
+The data was first read into the programming langauge (R) and assigned a unique name. The column names were then cleaned to remove any spaces or capital letters. The columns are analysis focused on, totmass, species, feedlevel, sla, chlorophyll, amass, num_lvs, num_phylls, were then selected to only be included in the dataframe.
 
 ```{r reading-data}
 plant <- read.csv(here("data/knb-lter-hfr/hf109-01-sarracenia.csv")) %>%
@@ -82,7 +57,10 @@ plant <- read.csv(here("data/knb-lter-hfr/hf109-01-sarracenia.csv")) %>%
 \
 c. Visualization of missing observations with an accompanying caption and discussion
 
-```{r missing-data-vis, fig.cap = "Figure 1: Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes data is missing."}
+\
+Next, a visualization of missing data observations from the selected dataframe was created and indicated there were missing observations for the variables, Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers and Phyllodes. These variables are relevant to our hypothesis because they include several of the variables used to predict individual biomass. The missing values are relevant so they must be filtered out as a subset of the dataframe.
+
+```{r missing-data-vis, fig.cap = "Figure 1: Visualization of missing data observations. Chlorophyll, Mass, Specific Leaf Area, Phyllodes, and Pitchers. data is missing."}
 #visualizing missing observations 
 gg_miss_var(plant)+
   #adding a caption 
@@ -96,14 +74,9 @@ plant_subset <- plant %>%
   drop_na(sla, chlorophyll, amass, num_lvs, num_phylls)
 ```
 
-\
-Discussion: 1-3 sentences
+A correlation plot based on Pearson's correlation between the variables of interest was visualized. Pearson's correlation measures the strength of the linear relationship between two variables with a value between -1 to 1. A value of -1 means total negative linear correlation, a value of 0 means no correlation, and a value of +1 means a total positive correlation (Nettleton, 2014). Most of the variables have a correlartion of less than 0.3, meaning they are slightly positively correlated.
 
-\
-d. Visualization of Pearson's correlation between variables with an accompanying\
-caption and discussion.
-
-```{r pearson, fig.cap = "Figure 2: A correlation plot determining the relationship between variables in the dataset. The higher the number, the higher correlation."}
+```{r pearson, fig.cap = "Figure 2: A correlation plot determining the relationship between variables in the dataset. The higher the number, the higher the positive correlation (and vice versa)."}
 # calculate Pearson's r for numerical values only
 plant_cor <- plant_subset %>% 
   select(feedlevel:num_phylls) %>% 
@@ -117,35 +90,159 @@ corrplot(plant_cor,
          )
 ```
 
-Discussion: 1-3 sentences
+A pair plot was created to further visually explore the data and find the relationship between two variables at a time. The plots that go through the middle are the density plots of the individual variables, which are all skewed to the left. Categorical variables, such as species, do not have a density plot and instead have a bar graph. The plots along the sides explore the relationship between two variables using scatter plots for numerical data and box plots for categorical data.
+
+```{r pairs-plot, fig.cap= "Figure 3. A pair plot to analyze the paired relationship between all variables in the analysis."}
+plant_subset %>% 
+  select(totmass:num_phylls) %>% 
+  ggpairs()
+```
+
+The null model and full model were created to begin the linear regression analysis. The null model assigns the value of the predicted variable, individual mass, to 1 so it is being modeled as a function of a constant term. The full model includes all variables to assess a linear relationship between each predictor variable and individual mass, the response variable. \
+
+```{r null-and-full-models}
+null <- lm(totmass ~ 1, data = plant_subset)
+full <- lm(totmass ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+```
+
+After creating the linear models, assumption checks were ran to visually and statistically assess normality and homoskedasticity of residuals using diagnostic plots for the full model. The residuals vs fitted plot showed the data points are clustered around the middle line, which is relatively straight. The scale-location plot showed the data points more randomly scattered and the line had a slight upwards slope. These visual assessment indicates there is not heteroscedasticity of residuals. The normal QQ plot was very linear, indicating the data is normal. The Shapiro-Wilk test stated there was non-normality of residuals was detected (p \< .001) and the Breusch-Pagan test stated heteroscedasticity (non-constant error variance) was detected (p \< .001).
+
+```{r full-diagnostics-visual}
+par(mfrow = c(2, 2))
+plot(full)
+```
+
+```{r full-statistical}
+#Shapiro-Wilk test 
+check_normality(full)
+# Breusch-Pagan test
+check_heteroscedasticity(full)
+```
 
 \
-e. Visualization of relationships between variables (not correlation) with an\
-accompanying caption and discussion (caption: 1-3 sentences, discussion: 1-3\
-sentences)
+The model was transformed using the log function to address the problems with normality and homoscedasticity. Taking the logarithm of the response variable can help stabilize the variance and approximate a more normal distribution.
+
+```{r}
+# create a linear model using the log version of the null model  
+null_log <- lm(log(totmass) ~ 1, data = plant_subset)
+# create a linear model using the log version of the full model  
+full_log <- lm(log(totmass) ~ species + feedlevel + sla + chlorophyll + amass + num_lvs + num_phylls, data = plant_subset)
+# visually check normality and homoskedasticity 
+par(mfrow = c(2, 2))
+plot(full_log)
+# Shapiro-Wilk test 
+check_normality(full_log)
+# Breusch-Pagan test
+check_heteroscedasticity(full_log)
+```
+
+I chose species with total mass because I wanted to see if the species could predict individual mass, I assumed that there could be a correlation between the two.
+
+```{r model1}
+# create a new model taking the log of the relationship between total mass and species type
+model1 <- lm(log(totmass) ~ species, data = plant_subset)
+#plotting to visually assess normality and homoscedasticity
+par(mfrow = c(2, 2))
+plot(model1)
+# Shapiro-Wilk test 
+check_normality(model1)
+# Breusch-Pagan test
+check_heteroscedasticity(model1)
+```
+
+I chose species with total mass because I wanted to see if the species and the level of food that the plant ate could predict individual mass, I assumed that there could be a correlation between them because more food usually means more mass and I already saw there was a relationship with species type.
+
+```{r model2}
+model2 <- lm(log(totmass) ~ species + feedlevel, data = plant_subset)
+
+plot(model2)
+# Shapiro-Wilk test 
+check_normality(model2)
+# Breusch-Pagan test
+check_heteroscedasticity(model2)
+```
+
+I chose species with total mass because I wanted to see if the species and the level of food that the plant ate could predict individual mass in addition to some other variables. I assumed that there could be a correlation between them because more food usually means more mass and I already saw there was a relationship with species type.
+
+```{r}
+model3 <- lm(log(totmass) ~ species + feedlevel + amass + chlorophyll, data = plant_subset)
+
+plot(model3)
+# Shapiro-Wilk test 
+check_normality(model3)
+# Breusch-Pagan test
+check_heteroscedasticity(model3)
+```
+
+I evaluated multicollinearity‎ using the variance inflation factor for the full model. Multicollinearity occurs when two or more independent variables have high correlation to one another in a linear regression model. High multicollinearity‎ is a problem because it indicates the variables are not independent and makes the model less reliable.
+
+```{r multicollinearity}
+car::vif(full_log)
+```
 
 \
-f. Creating the null and full model with accompanying discussion (1-3 sentences)\
-g. Visual and statistical assumption checks for the full model with accompanying\
-discussion (1-3 sentences)\
-h. Explanation of any transformation and justification (1-3 sentences)\
-i. Model construction with visual and statistical assumption checks for three\
-additional models with justification (i.e. why did you choose those predictor\
-variables?) (justification: 1-3 sentences per model)\
-j. Variance inflation factor check for the full model with accompanying discussion\
-(discussion: 1-3 sentences)\
 k. Model comparison using the null model, full model, and additional models from part 7g
+
+```{r model-comparison}
+AICc(full_log)
+AICc(model1)
+AICc(model2)
+AICc(model3)
+AICc(null_log)
+```
 
 ## Results
 
 Write a results section that includes\
-a. A description of the best model and how you chose it, with a summary of model\
-results (parenthetical and/or table, 1-3 sentences)\
-b. Interpretation of your chosen model (1-3 sentences)\
-c. Visualization of model predictions for biomass as a function of the predictor\
-variable of your choice with an accompanying caption (caption: 1-3 sentences)\
+a. A description of the best model and how you chose it, with a summary of model
+
+We found the full log model including species, feedlevel, specific leaf area, chlorophyll, photosynthetic rate, number of pitchers and phyllodes produced by each plant, number of phyllodes produced by each plant because it had the lowest AICc value. Model summary: residual standard error: 0.413 on 87 degrees of freedom. Multiple R-squared: 0.8687,	Adjusted R-squared: 0.8461. F-statistic: 38.38 on 15 and 87 DF, p-value: \< 2.2e-16. More information included in table below.
+
+```{r summary}
+summary(full_log)
+
+table <- tidy(full_log, conf.int = TRUE, exponentiate = TRUE) %>% 
+  # change the p-value numbers if they're really small
+  # change the estmaes, standard error, and t-tstatistics to round to ___ digits
+  # using mutate
+  # make it into a flextable
+  flextable() %>% 
+  # fit it to the viewer
+  autofit()
+
+table
+```
+
+\
+b. Interpretation of your chosen model (1-3 sentences)
+
+The full log model \
+c. Visualization of model predictions for biomass as a function of the predictor
+
+```{r fig.cap= Figure 4. A visualization of model predictions for biomass as a function of species, feedlevel, and chlorophyll.}
+# use `ggpredict()` to backtranform estimates
+model_pred <- ggpredict(full_log, terms = "species", back.transform = TRUE)
+
+plot(ggpredict(full_log, terms = "species", back.transform = TRUE), add.data = TRUE)
+
+plot(ggpredict(full_log, terms = "feedlevel", back.transform = TRUE), add.data = TRUE)
+
+plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = TRUE)
+
+model_pred
+```
+
+\
 d. Discussion of results: what does this model mean biologically? (1-3 sentences)
 
 ## Bibliography
 
 Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. "Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates." *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
+
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
+
+https://www.mdpi.com/2076-3417/12/20/10289
+
+https://www.sciencedirect.com/topics/computer-science/pearson-correlation#:\~:text=The%20Pearson%20correlation%20measures%20the,meaning%20a%20total%20positive%20correlation.
