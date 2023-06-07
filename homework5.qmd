@@ -96,7 +96,7 @@ plant_subset %>%
   ggpairs()
 ```
 
-The null model and full model were created to begin the linear regression analysis. The null model assigns the value of the predicted variable, individual mass, to 1 so it is being modeled as a function of a constant term. The full model includes all variables to assess a linear relationship between each predictor variable and individual mass, the response variable. \
+The null model and full model were created to begin the linear regression analysis. The null model assigns the value of the predicted variable, individual mass, to 1 so it is being modeled as a function of a constant term. The full model includes all variables to assess a linear relationship between each predictor variable and individual mass, the response variable.\
 
 ```{r null-and-full-models}
 null <- lm(totmass ~ 1, data = plant_subset)
@@ -191,7 +191,7 @@ AICc(null_log)
 
 ## Results
 
-We found the full log model including species, feedlevel, specific leaf area, chlorophyll, photosynthetic rate, number of pitchers and phyllodes produced by each plant, number of phyllodes produced by each plant because it had the lowest AICc value. Model summary: residual standard error: 0.413 on 87 degrees of freedom. Multiple R-squared: 0.8687,	Adjusted R-squared: 0.8461. F-statistic: 38.38 on 15 and 87 DF, p-value: \< 2.2e-16. More information included in table below.
+We found the full log model including species, feedlevel, specific leaf area, chlorophyll, photosynthetic rate, number of pitchers and phyllodes produced by each plant, number of phyllodes produced by each plant because it had the lowest AICc value. Model summary: residual standard error: 0.413 on 87 degrees of freedom. Multiple R-squared: 0.8687, Adjusted R-squared: 0.8461. F-statistic: 38.38 on 15 and 87 DF, p-value: \< 2.2e-16. More information included in table below.
 
 The full log model shows the variables with most influence over the total mass are several species such as salata, flava, leucophylla, spsittacina, rosea, and rubra. The model indicates the environmental variables such as feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls have are not likely to predict total mass because their estimate is close to 1.
 
@@ -225,8 +225,8 @@ model_pred
 
 Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. "Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates." *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
 
-Hotti, Hannu, et al. \"Metabolite Profiling of the Carnivorous Pitcher Plants Darlingtonia and Sarracenia.\" *PLOS ONE*, doi.org/10.1371%2Fjournal.pone.0171078. Accessed 7 June 2023. 
+Hotti, Hannu, et al. "Metabolite Profiling of the Carnivorous Pitcher Plants Darlingtonia and Sarracenia." *PLOS ONE*, doi.org/10.1371%2Fjournal.pone.0171078. Accessed 7 June 2023. 
 
-\"Pearson Correlation.\" *Pearson Correlation - an Overview \| ScienceDirect Topics*, 2014, www.sciencedirect.com/topics/computer-science/pearson-correlation#:\~:text=The%20Pearson%20correlation%20measures%20the,meaning%20a%20total%20positive%20correlation.
+"Pearson Correlation." *Pearson Correlation - an Overview \| ScienceDirect Topics*, 2014, www.sciencedirect.com/topics/computer-science/pearson-correlation#:\~:text=The%20Pearson%20correlation%20measures%20the,meaning%20a%20total%20positive%20correlation.
 
-Pilarska, Kinga Maria, et al. \"Characterization of Carnivorous Plants Sarracenia Purpurea L. Transformed with Agrobacterium Rhizogenes.\" *MDPI*, 13 Oct. 2022, www.mdpi.com/2076-3417/12/20/10289. 
+Pilarska, Kinga Maria, et al. "Characterization of Carnivorous Plants Sarracenia Purpurea L. Transformed with Agrobacterium Rhizogenes." *MDPI*, 13 Oct. 2022, www.mdpi.com/2076-3417/12/20/10289. 
