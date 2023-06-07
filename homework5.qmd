@@ -193,9 +193,6 @@ AICc(null_log)
 
 ## Results
 
-Write a results section that includes\
-a. A description of the best model and how you chose it, with a summary of model
-
 We found the full log model including species, feedlevel, specific leaf area, chlorophyll, photosynthetic rate, number of pitchers and phyllodes produced by each plant, number of phyllodes produced by each plant because it had the lowest AICc value. Model summary: residual standard error: 0.413 on 87 degrees of freedom. Multiple R-squared: 0.8687,	Adjusted R-squared: 0.8461. F-statistic: 38.38 on 15 and 87 DF, p-value: \< 2.2e-16. More information included in table below.
 
 ```{r summary}
@@ -216,7 +213,9 @@ table
 \
 b. Interpretation of your chosen model (1-3 sentences)
 
-The full log model \
+The full log model shows the variables with most influence over the total mass are several species such as salata, flava, leucophylla, spsittacina, rosea, and rubra. The model indicates the environmental variables such as feedlevel, sla, chlorophyll, amass, num_lvs, and num_phylls have are not likely to predict total mass because their estimate is close to 1.
+
+\
 c. Visualization of model predictions for biomass as a function of the predictor
 
 ```{r fig.cap= Figure 4. A visualization of model predictions for biomass as a function of species, feedlevel, and chlorophyll.}
@@ -225,18 +224,17 @@ model_pred <- ggpredict(full_log, terms = "sla", back.transform = TRUE)
 
 plot(ggpredict(full_log, terms = "sla", back.transform = TRUE), add.data = TRUE)
 
-
 model_pred
 ```
 
 \
 d. Discussion of results: what does this model mean biologically? (1-3 sentences)
 
-## Bibliography
+Biologically, this model means that the predicted values of total above- and below-ground plant biomass are negatively linearly correlated with specific leaf area. As specific leaf area increase, mass decreases.
+
+#### References
 
 Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. "Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates." *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
-
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
 
 https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
 
