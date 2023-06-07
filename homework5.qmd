@@ -218,7 +218,7 @@ The full log model shows the variables with most influence over the total mass a
 \
 c. Visualization of model predictions for biomass as a function of the predictor
 
-```{r fig.cap= Figure 4. A visualization of model predictions for biomass as a function of species, feedlevel, and chlorophyll.}
+```{r fig.cap= "Figure 4. A visualization of model predictions for biomass as a function of species, feedlevel, and chlorophyll."}
 # use `ggpredict()` to backtranform estimates
 model_pred <- ggpredict(full_log, terms = "sla", back.transform = TRUE)
 
@@ -236,8 +236,8 @@ Biologically, this model means that the predicted values of total above- and bel
 
 Ellison, Aaron M., Hannah L. Buckley, Thomas E. Miller, and Nicholas J. Gotelli. 2004. "Morphological Variation in *Sarracenia Purpurea* (Sarraceniaceae): Geographic, Environmental, and Taxonomic Correlates." *American Journal of Botany* 91 (11): 1930--35. <https://doi.org/10.3732/ajb.91.11.1930>.
 
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5319649/
+Hotti, Hannu, et al. \"Metabolite Profiling of the Carnivorous Pitcher Plants Darlingtonia and Sarracenia.\" *PLOS ONE*, doi.org/10.1371%2Fjournal.pone.0171078. Accessed 7 June 2023. 
 
-https://www.mdpi.com/2076-3417/12/20/10289
+Pilarska, Kinga Maria, et al. \"Characterization of Carnivorous Plants Sarracenia Purpurea L. Transformed with Agrobacterium Rhizogenes.\" *MDPI*, 13 Oct. 2022, www.mdpi.com/2076-3417/12/20/10289. 
 
-https://www.sciencedirect.com/topics/computer-science/pearson-correlation#:\~:text=The%20Pearson%20correlation%20measures%20the,meaning%20a%20total%20positive%20correlation.
+\"Pearson Correlation.\" *Pearson Correlation - an Overview \| ScienceDirect Topics*, 2014, www.sciencedirect.com/topics/computer-science/pearson-correlation#:\~:text=The%20Pearson%20correlation%20measures%20the,meaning%20a%20total%20positive%20correlation.
