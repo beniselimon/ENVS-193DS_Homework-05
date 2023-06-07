@@ -221,13 +221,10 @@ c. Visualization of model predictions for biomass as a function of the predictor
 
 ```{r fig.cap= Figure 4. A visualization of model predictions for biomass as a function of species, feedlevel, and chlorophyll.}
 # use `ggpredict()` to backtranform estimates
-model_pred <- ggpredict(full_log, terms = "species", back.transform = TRUE)
+model_pred <- ggpredict(full_log, terms = "sla", back.transform = TRUE)
 
-plot(ggpredict(full_log, terms = "species", back.transform = TRUE), add.data = TRUE)
+plot(ggpredict(full_log, terms = "sla", back.transform = TRUE), add.data = TRUE)
 
-plot(ggpredict(full_log, terms = "feedlevel", back.transform = TRUE), add.data = TRUE)
-
-plot(ggpredict(full_log, terms = "chlorophyll", back.transform = TRUE), add.data = TRUE)
 
 model_pred
 ```
